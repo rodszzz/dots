@@ -1,0 +1,51 @@
+Config {  font    = "xft:monospace:pixelsize=12:antialias=true:hinting=true, Noto Color Emoji:pixelsize=12:antialias=true:hinting=true, Noto Sans CJK JP:pixelsize=12:antialias=true:hinting=true, Noto Sans CJK KR:pixelsize=12:antialias=true:hinting=true"
+--      additionalFonts MY ASS
+--       , additionalFonts = [ "xft:Font Awesome 5 Free Solid:pixelsize=12" 
+--                           , "xft:Noto Color Emoji:pixelsize=12"
+--                           ]
+       , borderColor = "#0c101c"
+       , border = TopB
+       , bgColor = "#101012"
+       , fgColor = "#e1d9c8"
+       , alpha = 255
+       -- , position = Static { xpos = 0 , ypos = 0, width = 1366, height = 20 }
+       , textOffset = -1
+       , iconOffset = -1
+       , lowerOnStart = True
+       , pickBroadest = False
+       , persistent = True
+       , hideOnStart = False
+       , iconRoot = "."
+       , allDesktops = True
+       , overrideRedirect = True --mudei esse
+       , commands = [ Run Cpu ["-L","3","-H","50",
+                               "--normal","#D58546","--high","#D58546"] 10
+                    , Run Memory ["-t","Mem: <usedratio>%"] 10
+                    , Run Date "%a %b %d <fc=#D58546>[ %H:%M:%S ]</fc>" "date" 10
+                    , Run DiskU [("/", "<free>")] [] 60
+                    , Run Network "wlp8s0" ["-L","100","-H","1000",
+                                          "--normal","#D58546","--high","red"] 10
+                    , Run BatteryP ["BAT0"]
+                                   ["-t", "<acstatus>"
+                                   , "-L", "59", "-H", "60"
+                                   , "-l", "red", "-h", "green"
+                                   , "--", "-O", "  <left>%", "-i", " <left>%" , "-o", " <left>%"
+                                   , "-a", "notify-send -u critical 'COMEÇE A CARREGAR ESSE NOTEBOOK AGORA!!!'"
+                                   , "-A", "50"
+                                   ] 10
+		    , Run Com "/home/rodrigo/.config/xmobar/wifi.sh" [] "wifi" 10
+ 		    , Run DynNetwork -- use %dynnetwork% together with %wifi%
+				   [ "--template" , "↑<tx>kB/s ↓<rx>kB/s"
+				   , "--Low"      , "1000"       -- units: B/s
+				   , "--High"     , "5000"       -- units: B/s
+				   , "--low"      , "green"
+				   , "--normal"   , "orange"
+				   , "--high"     , "red"
+				   ] 10
+                    , Run UnsafeStdinReader
+                    ]
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = "  %UnsafeStdinReader% }\
+       \{ %battery% <fc=#666666>|</fc> %cpu% <fc=#666666>|</fc> %memory% <fc=#666666>|</fc> %disku% <fc=#666666>|</fc> <fc=#e1d9c8>%date%</fc>"
+ }
